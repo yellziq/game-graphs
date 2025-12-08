@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Flow - Puzzle Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-content">
+            <h1 class="game-title">Graph Flow</h1>
+            <p class="game-subtitle">A Resource Distribution Puzzle</p>
+            
+            <div class="rules-container">
+                <h2>How to Play</h2>
+                <div class="rule-item">
+                    <span class="rule-icon">🎯</span>
+                    <div class="rule-text">
+                        <strong>Goal:</strong> Make all nodes green by distributing resources to match their target values
+                    </div>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">👆</span>
+                    <div class="rule-text">
+                        <strong>Left Click:</strong> Select a node (it will show a white ring)
+                    </div>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">👉</span>
+                    <div class="rule-text">
+                        <strong>Right Click:</strong> Transfer 1 unit from selected node to another connected node
+                    </div>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">🔗</span>
+                    <div class="rule-text">
+                        <strong>Connections:</strong> You can only transfer between nodes connected by lines
+                    </div>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">🎨</span>
+                    <div class="rule-text">
+                        <strong>Colors:</strong> Red (empty) → Orange → Yellow → Green (perfect!) → Purple (overflow)
+                    </div>
+                </div>
+            </div>
+            
+            <button id="startButton" class="start-button">Start Game</button>
+            
+            <div class="difficulty-info">
+                <p>3 Levels of increasing difficulty</p>
+                <p>Can you complete all levels with minimum moves?</p>
+            </div>
+        </div>
+    </div>
+    
+    <script type='module' src='game.js'></script>
+</body>
+</html>
