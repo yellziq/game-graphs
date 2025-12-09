@@ -14,7 +14,6 @@ export class Logic {
         this.canvas.addEventListener('contextmenu', this.handleClick)
         this.ctx = this.canvas.getContext('2d')
         
-        // Create restart button
         this.restartBtn = document.createElement('button')
         this.restartBtn.textContent = '↻ Restart Level'
         this.restartBtn.className = 'restart-button'
@@ -38,7 +37,6 @@ export class Logic {
         this.makeGraph()
         this.rAF = requestAnimationFrame(this.update)
         
-        // Add restart button styles
         this.addRestartButtonStyles()
     }
     
@@ -124,67 +122,96 @@ export class Logic {
     }
 
     makeGraph() {
-        this.nodes = []
-        this.selectedNode = null
-        this.moves = 0
-        this.animationProgress = 0
+    this.nodes = []
+    this.selectedNode = null
+    this.moves = 0
+    this.animationProgress = 0
+    
+    let x = this.canvas.width / 2
+    let y = this.canvas.height / 2
+    
+    const levelConfigs = [
+        { nodeCount: 8, idealValue: 2, minDegree: 2, maxDegree: 3 },
+        { nodeCount: 10, idealValue: 3, minDegree: 2, maxDegree: 4 },
+        { nodeCount: 12, idealValue: 3, minDegree: 2, maxDegree: 4 }
+    ]
+    
+    const config = levelConfigs[this.level - 1]
+    
+    // ВАЖНО: targetSum всегда вычисляется как сумма всех idealValue
+    config.targetSum = config.nodeCount * config.idealValue
+    
+    let angle = 360 / config.nodeCount
+    
+    // Создаём узлы по кругу
+    for(let i = 0; i < config.nodeCount; i++) {
+        let nX = x + this.radius * Math.cos((angle * i) * Math.PI / 180)
+        let nY = y + this.radius * Math.sin((angle * i) * Math.PI / 180)
+        this.nodes.push(new Node(i, this.ctx, nX, nY, config.idealValue))
+    }
+    
+    // Генерируем случайный связный граф
+    this.generateConnectedGraph(config)
+    
+    // Устанавливаем начальное значение на случайном узле
+    let initialNode = Math.floor(Math.random() * config.nodeCount)
+    this.nodes[initialNode].setValue(config.targetSum)
+}
+
+
+    generateConnectedGraph(config) {
+        const n = config.nodeCount
+        const adjMatrix = Array(n).fill(0).map(() => Array(n).fill(false))
         
-        let x = this.canvas.width / 2
-        let y = this.canvas.height / 2
+        // Шаг 1: Создаём минимальное остовное дерево для гарантии связности
+        const visited = new Set([0])
+        const unvisited = new Set(Array.from({length: n}, (_, i) => i).slice(1))
         
-        const configs = [
-            {
-                nodeCount: 8,
-                initialNode: 0,
-                initialValue: 16,
-                idealValue: 2,
-                connections: [
-                    [0,1], [1,0], [0,4], [4,0], [0,5], [5,0],
-                    [1,5], [5,1], [2,6], [6,2], [3,4], [4,3],
-                    [3,6], [6,3], [3,7], [7,3]
-                ]
-            },
-            {
-                nodeCount: 10,
-                initialNode: 0,
-                initialValue: 30,
-                idealValue: 3,
-                connections: [
-                    [0,1], [1,0], [0,2], [2,0], [1,3], [3,1],
-                    [2,3], [3,2], [3,4], [4,3], [4,5], [5,4],
-                    [4,6], [6,4], [5,7], [7,5], [6,8], [8,6],
-                    [7,9], [9,7], [8,9], [9,8]
-                ]
-            },
-            {
-                nodeCount: 12,
-                initialNode: 0,
-                initialValue: 36,
-                idealValue: 3,
-                connections: [
-                    [0,1], [1,0], [0,11], [11,0], [1,2], [2,1],
-                    [2,3], [3,2], [3,4], [4,3], [4,5], [5,4],
-                    [5,6], [6,5], [6,7], [7,6], [7,8], [8,7],
-                    [8,9], [9,8], [9,10], [10,9], [10,11], [11,10],
-                    [0,6], [6,0], [3,9], [9,3]
-                ]
+        while(unvisited.size > 0) {
+            let from = Array.from(visited)[Math.floor(Math.random() * visited.size)]
+            let to = Array.from(unvisited)[Math.floor(Math.random() * unvisited.size)]
+            
+            if (!adjMatrix[from][to]) {
+                adjMatrix[from][to] = true
+                adjMatrix[to][from] = true
+                this.nodes[from].addConnection(this.nodes[to])
+                this.nodes[to].addConnection(this.nodes[from])
             }
-        ]
-        
-        const config = configs[this.level - 1]
-        let angle = 360 / config.nodeCount
-        
-        for(let i = 0; i < config.nodeCount; i++) {
-            let nX = x + this.radius * Math.cos((angle * i) * Math.PI / 180)
-            let nY = y + this.radius * Math.sin((angle * i) * Math.PI / 180)
-            this.nodes.push(new Node(i, this.ctx, nX, nY, config.idealValue))
+            
+            visited.add(to)
+            unvisited.delete(to)
         }
         
-        config.connections.forEach(([from, to]) => {
-            this.nodes[from].addConnection(this.nodes[to])
-        })
+        // Шаг 2: Добавляем дополнительные рёбра для интересности
+        const targetEdges = Math.floor(n * 1.4) // Примерно 1.4 * n рёбер
+        let currentEdges = n - 1 // Уже есть n-1 рёбер от spanning tree
         
-        this.nodes[config.initialNode].setValue(config.initialValue)
+        let attempts = 0
+        const maxAttempts = n * n
+        
+        while(currentEdges < targetEdges && attempts < maxAttempts) {
+            attempts++
+            let i = Math.floor(Math.random() * n)
+            let j = Math.floor(Math.random() * n)
+            
+            if(i === j || adjMatrix[i][j]) continue
+            
+            // Проверяем степень узлов
+            let degreeI = adjMatrix[i].filter(x => x).length
+            let degreeJ = adjMatrix[j].filter(x => x).length
+            
+            if(degreeI < config.maxDegree && degreeJ < config.maxDegree) {
+                // Избегаем соседних узлов на круге для эстетики
+                let distance = Math.min(Math.abs(i - j), n - Math.abs(i - j))
+                if(distance > 1) {
+                    adjMatrix[i][j] = true
+                    adjMatrix[j][i] = true
+                    this.nodes[i].addConnection(this.nodes[j])
+                    this.nodes[j].addConnection(this.nodes[i])
+                    currentEdges++
+                }
+            }
+        }
     }
 
     nextLevel() {
