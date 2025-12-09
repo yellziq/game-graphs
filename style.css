@@ -7,7 +7,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow: hidden;
-    background: #0f0f1e;
+    background: #f5f7fa;
 }
 
 canvas {
@@ -20,7 +20,7 @@ canvas {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1e 100%);
+    background: linear-gradient(135deg, #e8f4f8 0%, #d6e9f5 50%, #c5dff0 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -54,26 +54,26 @@ canvas {
 .welcome-content {
     max-width: 700px;
     padding: 40px;
-    background: rgba(30, 30, 50, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
     text-align: center;
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(78, 204, 163, 0.3);
+    border: 2px solid rgba(78, 155, 204, 0.3);
 }
 
 .game-title {
     font-size: 64px;
     font-weight: bold;
-    color: #4ecca3;
+    color: #2b7da8;
     margin-bottom: 10px;
-    text-shadow: 0 0 20px rgba(78, 204, 163, 0.5);
+    text-shadow: 0 0 20px rgba(43, 125, 168, 0.3);
     letter-spacing: 2px;
 }
 
 .game-subtitle {
     font-size: 20px;
-    color: #a8b2d1;
+    color: #4a5568;
     margin-bottom: 40px;
     font-style: italic;
 }
@@ -82,13 +82,13 @@ canvas {
     text-align: left;
     margin: 30px 0;
     padding: 20px;
-    background: rgba(20, 20, 35, 0.5);
+    background: rgba(240, 248, 255, 0.6);
     border-radius: 15px;
-    border: 1px solid rgba(78, 204, 163, 0.2);
+    border: 1px solid rgba(78, 155, 204, 0.25);
 }
 
 .rules-container h2 {
-    color: #4ecca3;
+    color: #2b7da8;
     font-size: 28px;
     margin-bottom: 20px;
     text-align: center;
@@ -99,14 +99,14 @@ canvas {
     align-items: flex-start;
     margin-bottom: 15px;
     padding: 12px;
-    background: rgba(30, 30, 50, 0.4);
+    background: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
     transition: transform 0.2s, background 0.2s;
 }
 
 .rule-item:hover {
     transform: translateX(5px);
-    background: rgba(40, 40, 60, 0.6);
+    background: rgba(230, 240, 250, 0.9);
 }
 
 .rule-icon {
@@ -116,19 +116,19 @@ canvas {
 }
 
 .rule-text {
-    color: #e0e0e0;
+    color: #2d3748;
     line-height: 1.6;
     font-size: 16px;
 }
 
 .rule-text strong {
-    color: #4ecca3;
+    color: #2b7da8;
     display: block;
     margin-bottom: 3px;
 }
 
 .start-button {
-    background: linear-gradient(135deg, #4ecca3 0%, #2ecc71 100%);
+    background: linear-gradient(135deg, #4299e1 0%, #2b7da8 100%);
     color: white;
     border: none;
     padding: 18px 60px;
@@ -138,15 +138,15 @@ canvas {
     cursor: pointer;
     margin-top: 30px;
     transition: all 0.3s ease;
-    box-shadow: 0 5px 20px rgba(78, 204, 163, 0.4);
+    box-shadow: 0 5px 20px rgba(66, 153, 225, 0.4);
     text-transform: uppercase;
     letter-spacing: 2px;
 }
 
 .start-button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(78, 204, 163, 0.6);
-    background: linear-gradient(135deg, #2ecc71 0%, #4ecca3 100%);
+    box-shadow: 0 8px 30px rgba(66, 153, 225, 0.6);
+    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
 }
 
 .start-button:active {
@@ -155,7 +155,7 @@ canvas {
 
 .difficulty-info {
     margin-top: 25px;
-    color: #8892b0;
+    color: #718096;
     font-size: 14px;
     line-height: 1.8;
 }
